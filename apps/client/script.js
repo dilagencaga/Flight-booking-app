@@ -535,7 +535,7 @@ async function refreshUserData() {
     if (user && (user.username || user.email)) {
         try {
             const username = user.username || user.email;
-            const res = await fetch(`http://localhost:3000/miles/${username}`);
+            const res = await fetch(`http://localhost:3000/v1/miles/${username}`);
             if (res.ok) {
                 const data = await res.json();
                 if (data.miles !== undefined) {
@@ -710,7 +710,7 @@ async function adminLogin() {
     const password = document.getElementById('a_pass').value;
 
     try {
-        const res = await fetch(`${GATEWAY_URL}/v1/auth/login`, {
+        const res = await fetch(`http://localhost:3000/v1/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -731,7 +731,7 @@ async function adminLogin() {
 
 async function loadAdminFlights() {
     try {
-        const res = await fetch(`${GATEWAY_URL}/v1/flights/admin`, { headers: { Authorization: `Bearer ${authToken}` } }); // Updated URL
+        const res = await fetch(`http://localhost:3000/v1/flights/admin`, { headers: { Authorization: `Bearer ${authToken}` } }); // Updated URL
         const flights = await res.json();
         const list = document.getElementById('admin-flight-list');
         list.innerHTML = '';
@@ -768,7 +768,7 @@ async function searchFlights() {
     resultsDiv.innerHTML = '<p>Searching...</p>';
 
     try {
-        let url = `${GATEWAY_URL}/v1/search/flights?from=${from}&to=${to}`; // Updated URL
+        let url = `http://localhost:3000/v1/search/flights?from=${from}&to=${to}`; // Updated URL
         if (date) {
             url += `&date=${date}`;
         }
@@ -897,7 +897,7 @@ async function buyTicket() {
     resultDiv.innerHTML = 'Processing...';
 
     try {
-        const res = await fetch(`${GATEWAY_URL}/v1/flights/buy`, {
+        const res = await fetch(`http://localhost:3000/v1/flights/buy`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -966,7 +966,7 @@ async function addFlight() {
             capacity: parseInt(document.getElementById('af_cap').value)
         };
 
-        const res = await fetch(`http://localhost:3000/flights/add`, {
+        const res = await fetch(`http://localhost:3000/v1/flights/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
