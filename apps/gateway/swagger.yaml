@@ -5,7 +5,7 @@ info:
   description: API Gateway documentation for the Microservices implementation.
 
 servers:
-  - url: /
+  - url: https://gateway-5k3z.onrender.com
 
 components:
   securitySchemes:
