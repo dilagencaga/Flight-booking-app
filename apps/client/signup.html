@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Miles&Smiles - SkyHigh Airlines</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .auth-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #232B38;
+            outline: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #E30A17;
+            /* Turkish Red */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #c20814;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #232B38;
+        }
+    </style>
+</head>
+
+<body style="background-color: #f4f6f8;">
+
+    <nav class="navbar">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2C10.67 2 10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z" />
+            </svg>
+            SkyHigh Airlines
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <!-- Form View -->
+        <div id="form-view">
+            <div class="header-logo">
+                <span style="color:#232B38;">Miles&Smiles</span>
+            </div>
+            <h2 style="text-align:center; margin-bottom:10px; color:#444;">Join the Privilege</h2>
+            <p style="text-align:center; margin-bottom:30px; color:#666;">Create your account to earn miles and enjoy
+                exclusive benefits.</p>
+
+            <!-- Error Message Container -->
+            <div id="error-message"
+                style="display:none; background-color: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; border: 1px solid #fca5a5; font-size: 0.9rem;">
+            </div>
+
+            <form id="signupForm">
+                <div class="form-row" style="display:flex; gap:15px; margin-bottom:0;">
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-input" required placeholder="John">
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-input" required placeholder="Doe">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">E-mail Address</label>
+                    <input type="email" class="form-input" required placeholder="john.doe@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" required placeholder="Create a strong password">
+                </div>
+
+                <div class="form-group">
+                    <label style="display:flex; align-items:center; gap:8px; color:#555; font-size:0.9rem;">
+                        <input type="checkbox" required>
+                        I agree to the Terms & Conditions and Privacy Policy.
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn">Create Account</button>
+            </form>
+
+            <div style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #666;">
+                Already have an account? <a href="signin.html"
+                    style="color: #E30A17; text-decoration: none; font-weight: 500;">Log in</a>
+            </div>
+        </div>
+
+        <!-- Success View -->
+        <div id="success-view" style="display: none; text-align: center; padding: 20px 0;">
+            <div style="font-size: 4rem; color: #28a745; margin-bottom: 20px;">✓</div>
+            <h2 style="color: #232B38; margin-bottom: 10px;">Registration Successful!</h2>
+            <p style="color: #666; margin-bottom: 30px;">Welcome to the privileged world of Miles&Smiles, <span
+                    id="success-name" style="font-weight:600"></span>.</p>
+
+            <div
+                style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px dashed #ccc;">
+                <p style="font-size: 0.9rem; color: #999; margin-bottom: 5px;">Your Member ID</p>
+                <p id="new-member-id" style="font-size: 2rem; font-weight: 700; color: #E30A17; letter-spacing: 2px;">
+                    TK---------</p>
+            </div>
+
+            <a href="signin.html" class="submit-btn"
+                style="display: block; text-decoration: none; text-align: center;">Go to Login</a>
+            <a href="index.html"
+                style="display: block; margin-top: 15px; color: #666; text-decoration: none; font-size: 0.9rem;">Back to
+                Home</a>
+        </div>
+    </div>
+
+    <script>
+        async function registerUser(event) {
+            event.preventDefault();
+            const submitBtn = document.querySelector('.submit-btn');
+            const errorDiv = document.getElementById('error-message');
+
+            // Reset UI
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Creating Account...';
+            errorDiv.style.display = 'none';
+            errorDiv.innerText = '';
+
+            const firstNameInput = document.querySelector('input[placeholder="John"]');
+            const firstName = firstNameInput.value;
+            const lastName = document.querySelector('input[placeholder="Doe"]').value;
+            const email = document.querySelector('input[type="email"]').value;
+            const password = document.querySelector('input[type="password"]').value;
+
+            try {
+                // CHANGED: Pointing to Gateway -> Flight Service (Cognito)
+                const response = await fetch('http://localhost:3000/v1/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    // Backend expects: firstName, lastName, email, password, dob(optional)
+                    body: JSON.stringify({ firstName, lastName, email, password, dob: "1990-01-01" })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Switch to success view
+                    document.getElementById('form-view').style.display = 'none';
+                    document.getElementById('success-view').style.display = 'block';
+
+                    document.getElementById('success-name').innerText = firstName;
+                    // AWS doesn't return memberId directly in the same way, but we can just hide that part or show a generic message.
+                    // For now, let's show a "Please Confirm Email" message.
+                    document.getElementById('new-member-id').innerText = "CHECK EMAIL";
+                    document.querySelector('#success-view p').innerHTML = `Welcome! <span style="font-weight:600">${firstName}</span>.<br><br><strong style="color:#d32f2f">IMPORTANT:</strong> Please check your inbox and click the confirmation link (or confirm via AWS Console) before logging in.`;
+                } else {
+                    // Show Inline Error
+                    errorDiv.innerText = data.error || 'Registration Failed.';
+                    errorDiv.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Create Account';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.innerText = 'An error occurred. Please try again.';
+                errorDiv.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Create Account';
+            }
+        }
+
+        document.getElementById('signupForm').onsubmit = registerUser;
+    </script>
+
+</body>
+
+</html>

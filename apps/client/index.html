@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyHigh Airlines - Book Your Flight</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2C10.67 2 10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z" />
+            </svg>
+            SkyHigh Airlines
+        </div>
+        <div class="nav-links">
+            <a href="#" onclick="openTab('search-flights')">Book a Flight</a>
+
+            <a href="#" onclick="openTab('admin')">Admin Portal</a>
+
+            <!-- Guest Actions (Visible when logged out) -->
+            <div id="guest-nav-actions" style="display:flex; align-items:center; gap:15px;">
+                <a href="signup-standard.html"
+                    style="text-decoration:none; color:rgba(255,255,255,0.9); font-weight:500; font-size:0.85rem; text-transform:uppercase;">Üye
+                    ol</a>
+                <a href="signin-standard.html"
+                    style="text-decoration:none; color:#fff; font-weight:600; font-size:0.85rem; border:1px solid rgba(255,255,255,0.6); padding:4px 12px; border-radius:4px; text-transform:uppercase; transition: all 0.2s;">GİRİŞ
+                    YAP</a>
+            </div>
+
+            <!-- User Profile (Hidden by default) -->
+            <div id="user-profile" style="display:none; position:relative;">
+                <div onclick="toggleProfileMenu()" style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                    <div style="display:flex; align-items:center; gap:8px; color:#fff;">
+                        <div id="up-name" style="font-weight:600; font-size:0.9rem;">Member Name</div>
+                        <div id="up-miles"
+                            style="font-size:0.85rem; opacity:0.8; color:#eee; border-left:1px solid rgba(255,255,255,0.3); padding-left:8px;">
+                            0 Miles</div>
+                    </div>
+                    <div
+                        style="width:36px; height:36px; background:#E30A17; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:bold; border:2px solid #fff;">
+                        <span id="up-initials">M</span>
+                    </div>
+                </div>
+                <!-- Dropdown -->
+                <div id="profile-dropdown"
+                    style="display:none; position:absolute; top:45px; right:0; background:#fff; width:220px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); overflow:hidden; text-align:left; z-index: 1000;">
+
+                    <a href="#" id="my-miles-link" onclick="showMilesHistory()"
+                        style="display:block; padding:10px 20px; color:#333; text-decoration:none; transition:bg 0.2s; font-size:0.9rem;">My
+                        Miles History</a>
+
+
+
+                    <hr style="border:0; border-top:1px solid #eee; margin:5px 0;">
+
+                    <a href="#" onclick="logoutUser()"
+                        style="display:block; padding:10px 20px; color:#E30A17; text-decoration:none; transition:bg 0.2s; font-weight:500; font-size:0.9rem;">Log
+                        Out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Discover the World</h1>
+            <p>Experience premium travel with SkyHigh Airlines.</p>
+        </div>
+    </header>
+
+    <!-- Main Booking Engine -->
+    <main class="booking-container">
+        <!-- Tabs -->
+        <div class="tabs" style="width: 100%; align-items: center;">
+            <div style="display:flex;">
+                <button class="tab-btn active" onclick="openTab('search-flights')">
+                    <span style="font-size:1.2rem; margin-right:5px;">✈</span> Book a Flight
+                </button>
+                <button class="tab-btn" onclick="openTab('admin')">
+                    <span style="font-size:1.2rem; margin-right:5px;">⚙</span> Admin / ML
+                </button>
+            </div>
+            <button id="miles-signin-btn" class="miles-btn" onclick="window.location.href='signup.html'" style="
+                background: transparent;
+                border: 1px solid rgba(255,255,255,0.3);
+                color: #fff;
+                padding: 6px 12px;
+                border-radius: 4px;
+                font-weight: 500;
+                cursor: pointer;
+                margin-right: 15px;
+                margin-left: auto; /* Push to right */
+                font-family: inherit;
+                font-size: 0.9rem;
+            ">Sign in to Miles&Smiles</button>
+        </div>
+
+        <!-- SEARCH TAB -->
+        <div id="search-flights" class="tab-content active">
+            <div class="section-title">Find Flights</div>
+            <!-- Search Options (Radio Buttons) -->
+            <div class="radio-group" style="margin-bottom: 1.5rem; display: flex; gap: 2rem;">
+                <label class="radio-label">
+                    <input type="radio" name="tripType" value="round" checked onclick="toggleTripType('round')">
+                    <span>Round Trip</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="tripType" value="one" onclick="toggleTripType('one')">
+                    <span>One Way</span>
+                </label>
+            </div>
+
+            <div class="form-row search-bar">
+                <div class="form-group" style="position:relative;">
+                    <label>From</label>
+                    <input type="text" id="sf_from" class="form-control" value="IST" placeholder="City"
+                        autocomplete="off" oninput="suggestAirports(this, 'suggestions-from')">
+                    <div id="suggestions-from" class="suggestions-box"></div>
+                </div>
+                <div class="form-group" style="position:relative;">
+                    <label>To</label>
+                    <input type="text" id="sf_to" class="form-control" value="LHR" placeholder="City" autocomplete="off"
+                        oninput="suggestAirports(this, 'suggestions-to')">
+                    <div id="suggestions-to" class="suggestions-box"></div>
+                </div>
+                <div class="form-group" style="position:relative;">
+                    <label>Departure</label>
+                    <input type="text" id="date-display-dep" class="form-control date-display-trigger"
+                        placeholder="Select Date" readonly onclick="toggleCalendar('dep')"
+                        style="cursor:pointer; background: #fff url('assets/calendar-icon.svg') no-repeat right 10px center; background-size: 20px;">
+                    <input type="hidden" id="sf_date_dep">
+
+                    <div id="date-dropdown-dep" class="date-dropdown">
+                        <div class="calendar-header">
+                            <button onclick="changeMonth(-1)">‹</button>
+                            <span id="current-month-year-dep">January 2026</span>
+                            <button onclick="changeMonth(1)">›</button>
+                        </div>
+                        <div class="calendar-suboptions">
+                            <label><input type="checkbox" id="flex-dates"> Flexible Dates</label>
+                            <label><input type="checkbox" id="direct-flights"> Direct Flights</label>
+                        </div>
+                        <div class="calendar-grid-header">
+                            <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                        </div>
+                        <div id="calendar-days-dep" class="calendar-days"></div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="ret-date-group" style="position:relative;">
+                    <label>Return</label>
+                    <input type="text" id="date-display-ret" class="form-control date-display-trigger"
+                        placeholder="Select Date" readonly onclick="toggleCalendar('ret')"
+                        style="cursor:pointer; background: #fff url('assets/calendar-icon.svg') no-repeat right 10px center; background-size: 20px;">
+                    <input type="hidden" id="sf_date_ret">
+
+                    <div id="date-dropdown-ret" class="date-dropdown">
+                        <div class="calendar-header">
+                            <button onclick="changeMonth(-1)">‹</button>
+                            <span id="current-month-year-ret">January 2026</span>
+                            <button onclick="changeMonth(1)">›</button>
+                        </div>
+                        <div class="calendar-grid-header">
+                            <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                        </div>
+                        <div id="calendar-days-ret" class="calendar-days"></div>
+                    </div>
+                </div>
+                <div class="form-group" style="min-width: 200px; flex: 0.8; position:relative;">
+                    <label>Passengers</label>
+                    <div id="pax-trigger" class="form-control"
+                        style="cursor:pointer; display:flex; align-items:center; justify-content:space-between; background:#fff;"
+                        onclick="togglePaxMenu()">
+                        <span id="pax-summary" style="font-weight:500;">Select Passenger Number</span>
+                        <span style="font-size:0.8rem; color:#999;">▼</span>
+                    </div>
+
+                    <!-- Passenger & Class Dropdown -->
+                    <div id="pax-dropdown" class="pax-dropdown">
+                        <!-- Cabin Selection (Tabs) -->
+                        <div style="font-weight:600; margin-bottom:10px; color:#444;">Selection by Cabin</div>
+                        <div class="cabin-selection">
+                            <label class="cabin-option active" id="cabin-eco" onclick="switchPaxTab('economy')">
+                                Economy
+                            </label>
+                            <label class="cabin-option" id="cabin-bus" onclick="switchPaxTab('business')">
+                                Business
+                            </label>
+                        </div>
+
+                        <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+
+                        <!-- Counters (Dynamic based on active tab) -->
+                        <div class="pax-row">
+                            <div>
+                                <strong>Adult</strong><br><small style="color:#777;">12+ years</small>
+                            </div>
+                            <div class="counter-controls">
+                                <button onclick="updatePax('adult', -1)">-</button>
+                                <span id="count-adult">0</span>
+                                <button onclick="updatePax('adult', 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="pax-row">
+                            <div>
+                                <strong>Child</strong><br><small style="color:#777;">2-12 years</small>
+                            </div>
+                            <div class="counter-controls">
+                                <button onclick="updatePax('child', -1)">-</button>
+                                <span id="count-child">0</span>
+                                <button onclick="updatePax('child', 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="pax-row">
+                            <div>
+                                <strong>Infant</strong><br><small style="color:#777;">Under 2 years</small>
+                            </div>
+                            <div class="counter-controls">
+                                <button onclick="updatePax('infant', -1)">-</button>
+                                <span id="count-infant">0</span>
+                                <button onclick="updatePax('infant', 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="pax-row">
+                            <div>
+                                <strong>Student</strong><br><small style="color:#777;">Special Fare</small>
+                            </div>
+                            <div class="counter-controls">
+                                <button onclick="updatePax('student', -1)">-</button>
+                                <span id="count-student">0</span>
+                                <button onclick="updatePax('student', 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="flex:0;">
+                    <label>&nbsp;</label>
+                    <button class="btn-primary" onclick="searchFlights()">Search Flights ➜</button>
+                </div>
+            </div>
+            <div id="searchResult" class="results-area"></div>
+        </div>
+
+        <!-- BUY TAB -->
+        <!-- BUY TAB -->
+        <div id="buy" class="tab-content">
+            <!-- Booking Form Container -->
+            <div id="booking-form" class="booking-form" style="display:none;">
+                <div
+                    style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 2px solid #E30A17; padding-bottom:10px;">
+                    <h3 style="color: #232B38; margin:0;">Complete Your Booking</h3>
+
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div class="form-check" style="margin:0; display:flex; align-items:center; gap:8px;">
+                            <input type="checkbox" class="form-check-input" id="pay-with-miles"
+                                onchange="toggleMilesPayment()">
+                            <label class="form-check-label" for="pay-with-miles"
+                                style="font-weight:600; color:#232B38; cursor:pointer;">Pay with Miles</label>
+                        </div>
+                        <span id="miles-cost-display"
+                            style="display:none; font-size:0.9rem; color:#E30A17; font-weight:bold; background:rgba(227, 10, 23, 0.1); padding:4px 8px; border-radius:4px;">0
+                            Miles</span>
+                    </div>
+                </div>
+
+                <input type="hidden" id="bf_id">
+                <input type="hidden" id="bf_price"> <!-- Hidden field to store raw price -->
+                <!-- bf_code handled by text input but prefill uses id, so we need to ensure compatibility -->
+                <input type="hidden" id="bf_code">
+
+                <div
+                    style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; border: 1px solid #e9ecef;">
+                    <h4 id="bf_flight_code" style="margin:0; color:#E30A17;">CODE</h4>
+                    <div style="flex-grow:1; font-weight:500;" id="bf_route">Route</div>
+                    <div id="bf_amount" style="font-weight:bold; font-size:1.2rem;">$0</div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Passenger Information | Adult</label>
+                        <div style="display:flex; gap:10px; margin-bottom:10px;">
+                            <label class="radio-label"><input type="radio" name="gender" value="Mr" checked>
+                                Mr.</label>
+                            <label class="radio-label"><input type="radio" name="gender" value="Ms"> Ms.</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First / Middle Name (as shown on ID)</label>
+                        <input type="text" id="bf_firstname" class="form-control" placeholder="e.g. JOHN">
+                    </div>
+                    <div class="form-group">
+                        <label>Surname (as shown on ID)</label>
+                        <input type="text" id="bf_lastname" class="form-control" placeholder="e.g. DOE">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" id="bf_dob" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="bf_email" class="form-control" value="john@example.com">
+                    </div>
+                </div>
+
+                <!-- Guest Warning for Miles Payment -->
+                <div id="miles-guest-warning"
+                    style="display:none; background:#FFF3CD; border:1px solid #FFEEBA; color:#856404; padding:15px; border-radius:6px; margin-bottom:20px; text-align:center;">
+                    <p style="margin:0 0 10px 0; font-weight:600;">You should login to your account for paying with
+                        miles.</p>
+                    <div style="display:flex; justify-content:center; gap:10px;">
+                        <a href="signup.html" class="btn-primary"
+                            style="text-decoration:none; font-size:0.9rem; background:#232B38;">Join Miles&Smiles
+                            Family</a>
+                        <a href="signup-standard.html" class="btn-primary"
+                            style="text-decoration:none; font-size:0.9rem;">Create Standard Membership</a>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="buyTicket()">Confirm Purchase</button>
+                <div id="buyResult" class="results-area" style="border:none;"></div>
+            </div>
+        </div>
+        </div>
+
+        <!-- ADMIN / ML TAB -->
+        <div id="admin" class="tab-content">
+            <!-- Login Section -->
+            <div id="admin-login"
+                style="max-width: 400px; margin: 2rem auto; padding: 2rem; background: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h3 style="text-align:center; color:#232B38; margin-bottom:1.5rem;">Admin Login</h3>
+                <div class="form-group" style="margin-bottom:1rem;">
+                    <label>Username</label>
+                    <input type="text" id="login_username" class="form-control">
+                </div>
+                <div class="form-group" style="margin-bottom:1.5rem;">
+                    <label>Password</label>
+                    <input type="password" id="login_password" class="form-control">
+                </div>
+                <button class="btn-primary" onclick="loginAdmin()" style="width:100%;">Login</button>
+                <p id="loginResult" style="text-align:center; margin-top:1rem; color:red;"></p>
+            </div>
+
+            <!-- Admin Content (Hidden by default) -->
+            <div id="admin-content" style="display:none;">
+                <div class="section-title">Admin Operations</div>
+
+                <!-- Add Flight -->
+                <h4 style="margin-bottom:1rem; color:#444;">Add New Flight</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Code</label>
+                        <input type="text" id="af_code" class="form-control" placeholder="e.g. TK101">
+                    </div>
+                    <div class="form-group">
+                        <label>From</label>
+                        <input type="text" id="af_from" class="form-control" placeholder="IST">
+                    </div>
+                    <div class="form-group">
+                        <label>To</label>
+                        <input type="text" id="af_to" class="form-control" placeholder="JFK">
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="af_date" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duration (min)</label>
+                        <input type="number" id="af_dur" class="form-control" value="120" oninput="autoPredictPrice()">
+                    </div>
+                </div>
+
+                <div class="form-group" style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+                    <input type="checkbox" id="af_business_included" onchange="toggleBusinessPrice()"
+                        style="width:18px; height:18px;">
+                    <label for="af_business_included" style="margin:0; font-weight:600; cursor:pointer;">Business Class
+                        Included</label>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Economy Price ($)</label>
+                        <input type="number" id="af_price" class="form-control" placeholder="Auto-calculated" readonly>
+                    </div>
+                    <div class="form-group" id="business-price-group" style="display:none;">
+                        <label>Business Price ($)</label>
+                        <input type="number" id="af_price_business" class="form-control" placeholder="Auto-calculated"
+                            readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Capacity</label>
+                        <input type="number" id="af_cap" class="form-control" value="300">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="addFlight()">Add Flight</button>
+                <div id="addResult" style="margin-top:0.5rem; font-weight:bold;"></div>
+            </div>
+        </div>
+
+        <!-- Placeholder for Check-in -->
+
+
+    </main>
+
+    <script src="airports.js"></script>
+    <script src="script.js?v=DEBUG_LOGIN_1"></script>
+
+    <!-- Miles History Modal -->
+    <div id="miles-history-modal" class="modal"
+        style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5);">
+        <div class="modal-content"
+            style="background-color:#fefefe; margin:10% auto; padding:20px; border:1px solid #888; width:80%; max-width:600px; border-radius:8px;">
+            <div
+                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #ddd; padding-bottom:10px;">
+                <h2 style="margin:0; color:#232B38;">My Miles History</h2>
+                <span onclick="document.getElementById('miles-history-modal').style.display='none'"
+                    style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+            </div>
+
+            <div id="miles-history-content">
+                Loading history...
+            </div>
+        </div>
+    </div>
+
+    <div
+        style="position:fixed; bottom:5px; right:5px; background:rgba(0,0,0,0.5); color:#fff; padding:2px 5px; font-size:10px; pointer-events:none;">
+        v2.1 (CORRECTED)</div>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+const airports = [
+    // Turkey
+    { code: "IST", city: "İstanbul", name: "Istanbul Airport", country: "Turkey" },
+    { code: "SAW", city: "İstanbul", name: "Sabiha Gokcen Airport", country: "Turkey" },
+    { code: "ESB", city: "Ankara", name: "Esenboga Airport", country: "Turkey" },
+    { code: "ADB", city: "İzmir", name: "Adnan Menderes Airport", country: "Turkey" },
+    { code: "AYT", city: "Antalya", name: "Antalya Airport", country: "Turkey" },
+    { code: "DLM", city: "Muğla", name: "Dalaman Airport", country: "Turkey" },
+    { code: "BJV", city: "Muğla", name: "Milas-Bodrum Airport", country: "Turkey" },
+    { code: "ADA", city: "Adana", name: "Sakirpasa Airport", country: "Turkey" },
+    { code: "TZX", city: "Trabzon", name: "Trabzon Airport", country: "Turkey" },
+    { code: "GZT", city: "Gaziantep", name: "Gaziantep Airport", country: "Turkey" },
+    { code: "KYA", city: "Konya", name: "Konya Airport", country: "Turkey" },
+    { code: "SZF", city: "Samsun", name: "Carsamba Airport", country: "Turkey" },
+    { code: "ASR", city: "Kayseri", name: "Erkilet Airport", country: "Turkey" },
+    { code: "HTY", city: "Hatay", name: "Hatay Airport", country: "Turkey" },
+    { code: "MLX", city: "Malatya", name: "Erhac Airport", country: "Turkey" },
+    { code: "EZS", city: "Elazığ", name: "Elazig Airport", country: "Turkey" },
+    { code: "VAN", city: "Van", name: "Ferit Melen Airport", country: "Turkey" },
+    { code: "DIY", city: "Diyarbakır", name: "Diyarbakir Airport", country: "Turkey" },
+    { code: "GNY", city: "Şanlıurfa", name: "GAP Airport", country: "Turkey" },
+    { code: "ERC", city: "Erzincan", name: "Yildirim Akbulut Airport", country: "Turkey" },
+    { code: "ERZ", city: "Erzurum", name: "Erzurum Airport", country: "Turkey" },
+
+    // Europe
+    { code: "LHR", city: "London", name: "Heathrow Airport", country: "United Kingdom" },
+    { code: "LGW", city: "London", name: "Gatwick Airport", country: "United Kingdom" },
+    { code: "CDG", city: "Paris", name: "Charles de Gaulle Airport", country: "France" },
+    { code: "ORY", city: "Paris", name: "Orly Airport", country: "France" },
+    { code: "FRA", city: "Frankfurt", name: "Frankfurt Airport", country: "Germany" },
+    { code: "MUC", city: "Munich", name: "Munich Airport", country: "Germany" },
+    { code: "BER", city: "Berlin", name: "Berlin Brandenburg Airport", country: "Germany" },
+    { code: "AMS", city: "Amsterdam", name: "Schiphol Airport", country: "Netherlands" },
+    { code: "FCO", city: "Rome", name: "Fiumicino Airport", country: "Italy" },
+    { code: "MXP", city: "Milan", name: "Malpensa Airport", country: "Italy" },
+    { code: "MAD", city: "Madrid", name: "Barajas Airport", country: "Spain" },
+    { code: "BCN", city: "Barcelona", name: "El Prat Airport", country: "Spain" },
+    { code: "ZRH", city: "Zurich", name: "Zurich Airport", country: "Switzerland" },
+    { code: "VIE", city: "Vienna", name: "Vienna International Airport", country: "Austria" },
+    { code: "ATH", city: "Athens", name: "Eleftherios Venizelos Airport", country: "Greece" },
+    { code: "SVO", city: "Moscow", name: "Sheremetyevo Airport", country: "Russia" },
+
+    // Americas
+    { code: "JFK", city: "New York", name: "John F. Kennedy Airport", country: "USA" },
+    { code: "LAX", city: "Los Angeles", name: "Los Angeles International Airport", country: "USA" },
+    { code: "ORD", city: "Chicago", name: "O'Hare Airport", country: "USA" },
+    { code: "SFO", city: "San Francisco", name: "San Francisco International Airport", country: "USA" },
+    { code: "MIA", city: "Miami", name: "Miami International Airport", country: "USA" },
+    { code: "YYZ", city: "Toronto", name: "Pearson International Airport", country: "Canada" },
+    { code: "GRU", city: "Sao Paulo", name: "Guarulhos Airport", country: "Brazil" },
+
+    // Asia & Pacific
+    { code: "HND", city: "Tokyo", name: "Haneda Airport", country: "Japan" },
+    { code: "NRT", city: "Tokyo", name: "Narita Airport", country: "Japan" },
+    { code: "PEK", city: "Beijing", name: "Beijing Capital Airport", country: "China" },
+    { code: "SIN", city: "Singapore", name: "Changi Airport", country: "Singapore" },
+    { code: "BKK", city: "Bangkok", name: "Suvarnabhumi Airport", country: "Thailand" },
+    { code: "ICN", city: "Seoul", name: "Incheon Airport", country: "South Korea" },
+    { code: "DEL", city: "Delhi", name: "Indira Gandhi Airport", country: "India" },
+    { code: "BOM", city: "Mumbai", name: "Chhatrapati Shivaji Airport", country: "India" },
+    { code: "SYD", city: "Sydney", name: "Kingsford Smith Airport", country: "Australia" },
+
+    // Middle East
+    { code: "DXB", city: "Dubai", name: "Dubai International Airport", country: "UAE" },
+    { code: "DOH", city: "Doha", name: "Hamad International Airport", country: "Qatar" }
+];

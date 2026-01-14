@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - Miles&Smiles - SkyHigh Airlines</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .auth-container {
+            max-width: 450px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #232B38;
+            outline: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #E30A17;
+            /* Turkish Red */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #c20814;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #232B38;
+        }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .auth-link a {
+            color: #E30A17;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body style="background-color: #f4f6f8;">
+
+    <nav class="navbar">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2C10.67 2 10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z" />
+            </svg>
+            SkyHigh Airlines
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <!-- Form View -->
+        <div id="form-view">
+            <div class="header-logo">
+                <span style="color:#232B38;">Miles&Smiles</span>
+            </div>
+            <h2 style="text-align:center; margin-bottom:10px; color:#444;">Welcome Back</h2>
+            <p style="text-align:center; margin-bottom:30px; color:#666;">Log in to access your account.</p>
+
+            <form id="signinForm">
+
+                <div class="form-group">
+                    <label class="form-label">E-mail Address or Member ID</label>
+                    <input type="text" id="email" class="form-input" required placeholder="Member ID / Email">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" required placeholder="Enter your password">
+                </div>
+
+                <div class="form-group" style="display:flex; justify-content:space-between; align-items:center;">
+                    <label style="display:flex; align-items:center; gap:8px; color:#555; font-size:0.9rem;">
+                        <input type="checkbox"> Remember Me
+                    </label>
+                    <a href="#" style="font-size:0.9rem; color:#E30A17; text-decoration:none;">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="submit-btn">Log In</button>
+            </form>
+
+            <div class="auth-link">
+                Don't have an account? <a href="signup.html">Sign up</a>
+            </div>
+        </div>
+
+        <!-- Success View -->
+        <div id="success-view" style="display: none; text-align: center; padding: 40px 0;">
+            <div style="font-size: 4rem; color: #28a745; margin-bottom: 20px;">✓</div>
+            <h2 style="color: #232B38; margin-bottom: 10px;">Login Successful!</h2>
+            <p style="color: #666; margin-bottom: 30px;">Welcome back, <span id="success-name"
+                    style="font-weight:600"></span>.</p>
+            <p style="color: #999; font-size: 0.9rem;">Redirecting to home page...</p>
+            <div style="
+                width: 40px; 
+                height: 40px; 
+                border: 3px solid #f3f3f3; 
+                border-top: 3px solid #E30A17; 
+                border-radius: 50%; 
+                animation: spin 1s linear infinite; 
+                margin: 20px auto;"></div>
+            <style>
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            </style>
+        </div>
+    </div>
+
+    <script>
+        async function loginUser(event) {
+            event.preventDefault();
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Logging In...';
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Use the new Unified Login Endpoint (Cognito)
+                const response = await fetch('http://localhost:3000/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Cognito Login Success
+                    // We treat everyone as 'standardUser' effectively in this new unified flow
+                    localStorage.setItem('standardUser', JSON.stringify(data));
+                    localStorage.removeItem('milesUser');
+
+                    // Show Success
+                    document.getElementById('form-view').style.display = 'none';
+                    document.getElementById('success-view').style.display = 'block';
+                    document.getElementById('success-name').innerText = data.firstName;
+
+                    // Redirect after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                } else {
+                    alert('Login Failed: ' + (data.error || 'Unknown error'));
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Log In';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Connection Error: ' + error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Log In';
+            }
+        }
+
+        document.getElementById('signinForm').onsubmit = loginUser;
+    </script>
+
+</body>
+
+</html>

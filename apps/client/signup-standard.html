@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - SkyHigh Airlines</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            flex-direction: column;
+        }
+
+        .signup-container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .header-logo {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #232B38;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            border-color: #232B38;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #232B38;
+            /* Navy Blue for Standard */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #1a202a;
+        }
+
+        #error-message {
+            display: none;
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #fca5a5;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-logo" style="margin-bottom:30px;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="#232B38" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2C10.67 2 10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z" />
+        </svg>
+        <span>SkyHigh Airlines</span>
+    </div>
+
+    <div class="signup-container">
+
+        <!-- Registration Form View -->
+        <div id="form-view">
+            <h2 style="text-align:center; margin-bottom:10px; color:#444;">Create Account</h2>
+            <p style="text-align:center; margin-bottom:30px; color:#666;">Sign up for standard membership benefits.</p>
+
+            <!-- Error Message Container -->
+            <div id="error-message"></div>
+
+            <form id="signupForm">
+                <div style="display:flex; gap:15px;">
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label">First Name</label>
+                        <input type="text" id="firstName" class="form-input" required placeholder="John">
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" id="lastName" class="form-input" required placeholder="Doe">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" id="dob" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">E-mail Address</label>
+                    <input type="email" id="email" class="form-input" required placeholder="john.doe@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" required
+                        placeholder="Create a strong password">
+                </div>
+
+                <button type="submit" class="submit-btn">Create Account</button>
+            </form>
+
+            <div style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #666;">
+                Already have an account? <a href="signin-standard.html"
+                    style="color: #232B38; text-decoration: none; font-weight: 500;">Log in</a>
+            </div>
+        </div>
+
+        <!-- Success View -->
+        <div id="success-view" style="display:none; text-align:center;">
+            <div
+                style="width:64px; height:64px; background:#232B38; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px auto;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" />
+                </svg>
+            </div>
+            <h2 style="color:#232B38; margin-bottom:10px;">Welcome, <span id="success-name">User</span>!</h2>
+            <p style="color:#666; margin-bottom:30px;">Your account has been successfully created.</p>
+
+            <a href="signin-standard.html" class="submit-btn"
+                style="text-decoration:none; display:inline-block;">Proceed to Log In</a>
+        </div>
+
+    </div>
+
+    <div style="margin-top: 20px;">
+        <a href="index.html" style="color: #666; text-decoration: none; font-size: 0.9rem;">Back to Home</a>
+    </div>
+
+    <script>
+        const dobInput = document.getElementById('dob');
+        const today = new Date().toISOString().split('T')[0];
+        dobInput.max = today;
+
+        async function registerUser(event) {
+            event.preventDefault();
+            const submitBtn = document.querySelector('.submit-btn');
+            const errorDiv = document.getElementById('error-message');
+
+            errorDiv.style.display = 'none';
+            errorDiv.innerText = '';
+            submitBtn.innerText = 'Creating Account...';
+            submitBtn.disabled = true;
+
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const dob = document.getElementById('dob').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Using generic API auth route to avoid conflict with admin auth
+                const response = await fetch('http://localhost:3000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ firstName, lastName, dob, email, password })
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('form-view').style.display = 'none';
+                    document.getElementById('success-view').style.display = 'block';
+                    document.getElementById('success-name').innerText = firstName;
+                } else {
+                    errorDiv.innerText = data.error || 'Registration Failed.';
+                    errorDiv.style.display = 'block';
+                    submitBtn.innerText = 'Create Account';
+                    submitBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.innerText = 'Network error. Please try again.';
+                errorDiv.style.display = 'block';
+                submitBtn.innerText = 'Create Account';
+                submitBtn.disabled = false;
+            }
+        }
+
+        document.getElementById('signupForm').onsubmit = registerUser;
+    </script>
+
+</body>
+
+</html>

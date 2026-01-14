@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - SkyHigh Airlines</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            flex-direction: column;
+        }
+
+        .signin-container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .header-logo {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #232B38;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            border-color: #232B38;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #232B38;
+            /* Navy Blue */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #1a202a;
+        }
+
+        #error-message {
+            display: none;
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #fca5a5;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-logo" style="margin-bottom:30px;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="#232B38" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2C10.67 2 10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z" />
+        </svg>
+        <span>SkyHigh Airlines</span>
+    </div>
+
+    <div class="signin-container">
+
+        <div id="form-view">
+            <h2 style="text-align:center; margin-bottom:10px; color:#444;">Welcome Back</h2>
+            <p style="text-align:center; margin-bottom:30px; color:#666;">Log in to your account.</p>
+
+            <div id="error-message"></div>
+
+            <form id="signinForm">
+                <div class="form-group">
+                    <label class="form-label">E-mail Address</label>
+                    <input type="email" id="email" class="form-input" required placeholder="john.doe@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" required placeholder="Enter your password">
+                </div>
+
+                <div
+                    style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; font-size:0.9rem;">
+                    <label style="display:flex; align-items:center; gap:8px; color:#555;">
+                        <input type="checkbox"> Remember Me
+                    </label>
+                    <a href="#" style="color:#232B38; text-decoration:none;">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="submit-btn" id="loginBtn">Log In</button>
+            </form>
+
+            <div style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #666;">
+                Don't have an account? <a href="signup-standard.html"
+                    style="color: #232B38; text-decoration: none; font-weight: 500;">Sign up</a>
+            </div>
+        </div>
+
+        <div id="success-view" style="display:none; text-align:center; padding:20px;">
+            <div
+                style="width:50px; height:50px; border:3px solid #f3f3f3; border-top:3px solid #232B38; border-radius:50%; width:40px; height:40px; animation:spin 1s linear infinite; margin:0 auto 20px auto;">
+            </div>
+            <h3 style="color:#333;">Login Successful!</h3>
+            <p style="color:#666;">Redirecting back to home...</p>
+        </div>
+
+    </div>
+
+    <div style="margin-top: 20px;">
+        <a href="index.html" style="color: #666; text-decoration: none; font-size: 0.9rem;">Back to Home</a>
+    </div>
+
+    <style>
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <script>
+        async function loginUser(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('error-message');
+
+            errorDiv.style.display = 'none';
+            submitBtn.innerText = 'Logging In...';
+            submitBtn.disabled = true;
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.type === 'MILES') {
+                        // Save Miles User
+                        localStorage.setItem('milesUser', JSON.stringify(data));
+                        localStorage.removeItem('standardUser');
+                    } else {
+                        // Save Standard User
+                        localStorage.setItem('standardUser', JSON.stringify(data));
+                        localStorage.removeItem('milesUser');
+                    }
+
+                    document.getElementById('form-view').style.display = 'none';
+                    document.getElementById('success-view').style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                } else {
+                    errorDiv.innerText = data.error || 'Login Failed';
+                    errorDiv.style.display = 'block';
+                    submitBtn.innerText = 'Log In';
+                    submitBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.innerText = 'Network error.';
+                errorDiv.style.display = 'block';
+                submitBtn.innerText = 'Log In';
+                submitBtn.disabled = false;
+            }
+        }
+
+        document.getElementById('signinForm').onsubmit = loginUser;
+    </script>
+
+</body>
+
+</html>

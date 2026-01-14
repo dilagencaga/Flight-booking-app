@@ -1,0 +1,125 @@
+databases:
+  - name: airline_postgres
+    databaseName: airline_db
+    user: airline_user
+    plan: free
+    region: frankfurt
+
+services:
+  # --- Backend Services ---
+  - type: web
+    name: flight-service
+    runtime: node
+    region: frankfurt
+    plan: free
+    root: apps/flight-service
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: airline_postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: airline-redis
+          property: connectionString
+      - key: RABBITMQ_URL
+        sync: false  # User provides this manually in Render Dashboard
+
+  - type: web
+    name: search-service
+    runtime: node
+    region: frankfurt
+    plan: free
+    root: apps/search-service
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: airline_postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: airline-redis
+          property: connectionString
+
+  - type: worker
+    name: notification-service
+    runtime: node
+    region: frankfurt
+    plan: free
+    root: apps/notification-service
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: RABBITMQ_URL
+        sync: false # User provides this manually
+      - key: GMAIL_USER
+        sync: false # User provides this manually (optional)
+      - key: GMAIL_PASS
+        sync: false # User provides this manually (optional)
+
+  - type: web
+    name: ml-service
+    runtime: python
+    region: frankfurt
+    plan: free
+    root: apps/ml-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -b 0.0.0.0:$PORT app:app
+    # Python dependencies in requirements.txt must include gunicorn!
+
+  # --- Gateway ---
+  - type: web
+    name: gateway
+    runtime: node
+    region: frankfurt
+    plan: free
+    root: apps/gateway
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLIGHT_SERVICE_URL
+        fromService:
+          type: web
+          name: flight-service
+          property: url
+      - key: SEARCH_SERVICE_URL
+        fromService:
+          type: web
+          name: search-service
+          property: url
+      - key: ML_SERVICE_URL
+        fromService:
+          type: web
+          name: ml-service
+          property: url
+      # Notification service has no web URL, skipping
+
+  # --- Frontend ---
+  - type: web
+    name: client
+    env: docker
+    region: frankfurt
+    plan: free
+    dockerContext: ./apps/client
+    dockerfilePath: ./apps/client/Dockerfile
+    envVars:
+      - key: API_URL
+        fromService:
+          type: web
+          name: gateway
+          property: url
+
+  # --- Redis ---
+  - type: redis
+    name: airline-redis
+    region: frankfurt
+    plan: free
+    ipAllowList: [] # Open to internal services
