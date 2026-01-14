@@ -7,6 +7,9 @@ YOUTUBE VIDEO: https://youtu.be/17yjX3Pk4UA
 *   Client UI: https://client-y4za.onrender.com
 *   API Gateway: https://gateway-5k3z.onrender.com
 *   Flight Service: https://flight-service-j94a.onrender.com
+*   ML :https://ml-service-74v1.onrender.com
+*   search-service: https://search-service-y0s2.onrender.com
+*   notification-service: https://notification-service-oy6p.onrender.com
 
 ---
 
