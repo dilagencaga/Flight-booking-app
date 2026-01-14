@@ -33,7 +33,7 @@ services:
     runtime: node
     region: frankfurt
     plan: free
-    root: apps/search-service
+    rootDir: apps/search-service
     buildCommand: npm install
     startCommand: node index.js
     envVars:
@@ -52,7 +52,7 @@ services:
     runtime: node
     region: frankfurt
     plan: free
-    root: apps/notification-service
+    rootDir: apps/notification-service
     buildCommand: npm install
     startCommand: node index.js
     envVars:
@@ -68,7 +68,7 @@ services:
     runtime: python
     region: frankfurt
     plan: free
-    root: apps/ml-service
+    rootDir: apps/ml-service
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn -b 0.0.0.0:$PORT app:app
     # Python dependencies in requirements.txt must include gunicorn!
@@ -79,7 +79,7 @@ services:
     runtime: node
     region: frankfurt
     plan: free
-    root: apps/gateway
+    rootDir: apps/gateway
     buildCommand: npm install
     startCommand: node index.js
     envVars:
