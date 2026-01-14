@@ -22,6 +22,18 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+// Verify connection configuration
+transporter.verify(function (error, success) {
+    if (error) {
+        console.log('[SMTP Error] Connection failed:', error);
+    } else {
+        console.log('[SMTP Success] Server is ready to take our messages');
+    }
+});
+
+console.log(`[Config] Gmail User present: ${!!process.env.GMAIL_USER}`);
+console.log(`[Config] Gmail Pass present: ${!!process.env.GMAIL_USER}`);
+
 async function sendEmail(to, subject, text) {
     if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
         console.log(`[Mock Email] To: ${to}, Subject: ${subject}, Body: ${text}`);
