@@ -14,10 +14,15 @@ const path = require('path');
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'));
 const SECRET_KEY = process.env.SECRET_KEY || 'mysecretkey';
 
-const FLIGHT_SERVICE_URL = process.env.FLIGHT_SERVICE_URL || 'http://localhost:3001';
-const SEARCH_SERVICE_URL = process.env.SEARCH_SERVICE_URL || 'http://localhost:3002';
-const NOTIFICATION_SERVICE_URL = process.env.NOTIFICATION_SERVICE_URL || 'http://localhost:3003';
-const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:5000';
+const ensureProtocol = (url) => {
+    if (!url) return '';
+    return url.startsWith('http') ? url : `https://${url}`;
+};
+
+const FLIGHT_SERVICE_URL = ensureProtocol(process.env.FLIGHT_SERVICE_URL) || 'http://localhost:3001';
+const SEARCH_SERVICE_URL = ensureProtocol(process.env.SEARCH_SERVICE_URL) || 'http://localhost:3002';
+const NOTIFICATION_SERVICE_URL = ensureProtocol(process.env.NOTIFICATION_SERVICE_URL) || 'http://localhost:3003';
+const ML_SERVICE_URL = ensureProtocol(process.env.ML_SERVICE_URL) || 'http://localhost:5000';
 
 // Health Check
 app.get('/health', (req, res) => {

@@ -89,17 +89,17 @@ services:
         fromService:
           type: web
           name: flight-service
-          property: url
+          property: host
       - key: SEARCH_SERVICE_URL
         fromService:
           type: web
           name: search-service
-          property: url
+          property: host
       - key: ML_SERVICE_URL
         fromService:
           type: web
           name: ml-service
-          property: url
+          property: host
       # Notification service has no web URL, skipping
 
   # --- Frontend ---
@@ -115,7 +115,7 @@ services:
         fromService:
           type: web
           name: gateway
-          property: url
+          property: host
 
   # --- Redis ---
   - type: redis
