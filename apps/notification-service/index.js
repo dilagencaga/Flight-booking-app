@@ -8,17 +8,22 @@ const TICKET_QUEUE = 'ticket_notifications';
 const MILES_QUEUE = 'miles_notifications';
 
 // Gmail Transporter
-// Gmail Transporter (Using standard service with IPv4 enforcement)
+// Gmail Transporter (Paid Plan: Using Port 465 SSL)
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // SSL
     auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS
     },
+    tls: {
+        rejectUnauthorized: false
+    },
     family: 4, // Force IPv4
     logger: true,
     debug: true,
-    connectionTimeout: 10000, // Fail fast (10s)
+    connectionTimeout: 10000,
     greetingTimeout: 10000,
     socketTimeout: 10000
 });
