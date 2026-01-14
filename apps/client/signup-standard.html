@@ -201,7 +201,8 @@
 
             try {
                 // Using generic API auth route to avoid conflict with admin auth
-                const response = await fetch('http://localhost:3000/api/auth/register', {
+                // NOTE: 'http://localhost:3000' is a placeholder replaced by entrypoint.sh in production
+                const response = await fetch('http://localhost:3000/v1/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ firstName, lastName, dob, email, password })

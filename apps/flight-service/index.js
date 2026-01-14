@@ -614,15 +614,18 @@ app.delete('/v1/miles-smiles/members/:id', async (req, res) => {
 });
 
 // --- Start Server ---
-sequelize.sync({ alter: true }).then(() => {
-    console.log("Database synced");
+(async () => {
+    try {
+        await sequelize.sync({ alter: true });
+        console.log("Database synced");
+    } catch (err) {
+        console.error("Unable to connect to the database:", err);
+    }
+
+    // Try connecting to Queue, but don't block server start
+    connectQueue();
+
     app.listen(PORT, () => {
         console.log(`Flight Service running on port ${PORT}`);
-        connectQueue();
     });
-}).catch(err => {
-    console.error("Unable to connect to the database:", err);
-    // process.exit(1); // Optional: Exit so Render restarts the service cleanly?
-    // Failing to start is better than hanging specific to Render?
-    // Actually, if we don't exit, the port is never bound and Render health check fails.
-});
+})();

@@ -68,9 +68,20 @@ app.get('/v1/search/flights', async (req, res) => {
 
 // --- Start Server ---
 (async () => {
-    await redisClient.connect();
-    console.log("Connected to Redis");
-    await sequelize.sync();
+    try {
+        await redisClient.connect();
+        console.log("Connected to Redis");
+    } catch (err) {
+        console.error("Failed to connect to Redis:", err);
+    }
+
+    try {
+        await sequelize.sync();
+        console.log("Database synced");
+    } catch (err) {
+        console.error("Failed to sync database:", err);
+    }
+
     app.listen(PORT, () => {
         console.log(`Search Service running on port ${PORT}`);
     });
