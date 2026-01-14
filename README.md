@@ -1,11 +1,12 @@
 # Flight Booking Microservices Application
-
+GITHUB REPO: https://github.com/dilagencaga/Flight-booking-app.git
+YOUTUBE VIDEO: https://youtu.be/17yjX3Pk4UA
 ## 🚀 Deployed Application URLs
 **(Please replace these with your actual Render URLs)**
 
-*   **Client UI:** `[INSERT_CLIENT_URL_HERE]` (e.g., https://client-xyz.onrender.com)
-*   **API Gateway:** `[INSERT_GATEWAY_URL_HERE]`
-*   **Flight Service:** `[INSERT_FLIGHT_SERVICE_URL_HERE]`
+*   Client UI: https://client-y4za.onrender.com
+*   API Gateway: https://gateway-5k3z.onrender.com
+*   Flight Service: https://flight-service-j94a.onrender.com
 
 ---
 
