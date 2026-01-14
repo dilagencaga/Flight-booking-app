@@ -15,30 +15,22 @@ const transporter = nodemailer.createTransport({
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS
     },
-    // Force IPv4 to avoid Render IPv6 connectivity issues with Gmail
-    family: 4,
-    logger: true, // Log to console
-    debug: true   // Include SMTP traffic in logs
+    family: 4, // Force IPv4
+    logger: true,
+    debug: true,
+    connectionTimeout: 10000, // Fail fast (10s)
+    greetingTimeout: 10000,
+    socketTimeout: 10000
 });
-
-// Verify connection configuration
-transporter.verify(function (error, success) {
-    if (error) {
-        console.log('[SMTP Error] Connection failed:', error);
-    } else {
-        console.log('[SMTP Success] Server is ready to take our messages');
-    }
-});
-
-console.log(`[Config] Gmail User present: ${!!process.env.GMAIL_USER}`);
-console.log(`[Config] Gmail Pass present: ${!!process.env.GMAIL_USER}`);
 
 async function sendEmail(to, subject, text) {
+    // 1. Mock Check
     if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
         console.log(`[Mock Email] To: ${to}, Subject: ${subject}, Body: ${text}`);
         return;
     }
 
+    // 2. Try Sending via SMTP
     try {
         await transporter.sendMail({
             from: process.env.GMAIL_USER,
@@ -48,7 +40,12 @@ async function sendEmail(to, subject, text) {
         });
         console.log(`[Email Sent] To: ${to}`);
     } catch (error) {
-        console.error("Error sending email:", error);
+        console.error(`[SMTP Failed] Could not deliver email to ${to}:`, error.message);
+        console.log('--- [FALLBACK EMAIL LOG] ---');
+        console.log(`To: ${to}`);
+        console.log(`Subject: ${subject}`);
+        console.log(`Body: \n${text}`);
+        console.log('----------------------------');
     }
 }
 
