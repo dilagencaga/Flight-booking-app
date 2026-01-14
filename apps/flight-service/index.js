@@ -223,7 +223,7 @@ async function connectQueue() {
 // --- Routes ---
 
 // Admin: Add Flight
-app.post('/flights/add', async (req, res) => {
+app.post('/v1/flights/add', async (req, res) => {
     try {
         const flight = await Flight.create(req.body);
         res.status(201).json(flight);
@@ -233,7 +233,7 @@ app.post('/flights/add', async (req, res) => {
 });
 
 // Admin: Delete Flight
-app.delete('/flights/delete', async (req, res) => {
+app.delete('/v1/flights/delete', async (req, res) => {
     const { id } = req.body;
     try {
         if (!id) {
@@ -250,7 +250,7 @@ app.delete('/flights/delete', async (req, res) => {
 });
 
 // Admin: Add Miles
-app.post('/miles/add', async (req, res) => {
+app.post('/v1/miles/add', async (req, res) => {
     const { username, amount } = req.body;
     try {
         const [user, created] = await User.findOrCreate({
@@ -268,7 +268,7 @@ app.post('/miles/add', async (req, res) => {
 });
 
 // User: Get Miles
-app.get('/miles/:username', async (req, res) => {
+app.get('/v1/miles/:username', async (req, res) => {
     try {
         const user = await User.findOne({ where: { username: req.params.username } });
         if (!user) return res.status(404).json({ error: "User not found" });
@@ -279,7 +279,7 @@ app.get('/miles/:username', async (req, res) => {
 });
 
 // User: Get Miles History (RECONCILED)
-app.get('/miles/history/:username', async (req, res) => {
+app.get('/v1/miles/history/:username', async (req, res) => {
     try {
         // 1. Get User for total miles
         const user = await User.findOne({ where: { username: req.params.username } });
@@ -339,19 +339,19 @@ app.get('/miles/history/:username', async (req, res) => {
 });
 
 // Public: List Flights
-app.get('/flights', async (req, res) => {
+app.get('/v1/flights', async (req, res) => {
     const flights = await Flight.findAll();
     res.json(flights);
 });
 
 // Admin: List All Added Flights
-app.get('/flights/admin', async (req, res) => {
+app.get('/v1/flights/admin', async (req, res) => {
     const flights = await Flight.findAll();
     res.json(flights);
 });
 
 // User: Buy Ticket
-app.post('/flights/buy', async (req, res) => {
+app.post('/v1/flights/buy', async (req, res) => {
     const { flightId, passengerName, email, paymentMethod } = req.body; // paymentMethod: 'card' | 'miles'
 
     try {
@@ -486,7 +486,7 @@ cron.schedule('* * * * *', async () => {
 // --- Miles&Smiles Routes ---
 
 // Register Member
-app.post('/miles-smiles/register', async (req, res) => {
+app.post('/v1/miles-smiles/register', async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
     try {
         // Generate a random 9-digit member ID
@@ -579,7 +579,7 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 // Get All Members
-app.get('/miles-smiles/members', async (req, res) => {
+app.get('/v1/miles-smiles/members', async (req, res) => {
     try {
         const members = await MilesSmilesUser.findAll();
         res.json(members);
@@ -589,7 +589,7 @@ app.get('/miles-smiles/members', async (req, res) => {
 });
 
 // Delete All Members (Standard + Miles)
-app.delete('/miles-smiles/members/all', async (req, res) => {
+app.delete('/v1/miles-smiles/members/all', async (req, res) => {
     try {
         await MilesSmilesUser.destroy({ where: {}, truncate: true });
         await User.destroy({ where: {}, truncate: true });
@@ -603,7 +603,7 @@ app.delete('/miles-smiles/members/all', async (req, res) => {
 });
 
 // Delete Member by ID
-app.delete('/miles-smiles/members/:id', async (req, res) => {
+app.delete('/v1/miles-smiles/members/:id', async (req, res) => {
     try {
         const result = await MilesSmilesUser.destroy({ where: { id: req.params.id } });
         if (result === 0) return res.status(404).json({ error: "Member not found" });
@@ -620,4 +620,9 @@ sequelize.sync({ alter: true }).then(() => {
         console.log(`Flight Service running on port ${PORT}`);
         connectQueue();
     });
+}).catch(err => {
+    console.error("Unable to connect to the database:", err);
+    // process.exit(1); // Optional: Exit so Render restarts the service cleanly?
+    // Failing to start is better than hanging specific to Render?
+    // Actually, if we don't exit, the port is never bound and Render health check fails.
 });
