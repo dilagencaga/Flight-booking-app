@@ -29,6 +29,18 @@ app.get('/health', (req, res) => {
     res.json({ status: 'UP', service: 'Gateway' });
 });
 
+// Debug Endpoint (Temporary)
+app.get('/debug-env', (req, res) => {
+    res.json({
+        FLIGHT_SERVICE_URL,
+        SEARCH_SERVICE_URL,
+        NOTIFICATION_SERVICE_URL,
+        ML_SERVICE_URL,
+        ENV_FLIGHT: process.env.FLIGHT_SERVICE_URL, // Raw value
+        ENV_SEARCH: process.env.SEARCH_SERVICE_URL
+    });
+});
+
 // Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
