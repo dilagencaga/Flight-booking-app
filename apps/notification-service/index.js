@@ -1,5 +1,6 @@
 const amqp = require('amqplib');
 const nodemailer = require('nodemailer');
+const http = require('http'); // Added for Render health check
 require('dotenv').config();
 
 const RABBITMQ_URL = process.env.RABBITMQ_URL || 'amqp://localhost';
@@ -113,3 +114,15 @@ async function startConsumer() {
 }
 
 startConsumer();
+
+// Dummy HTTP Server for Render
+const PORT = process.env.PORT || 3003;
+const server = http.createServer((req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Notification Service is Running\n');
+});
+
+server.listen(PORT, () => {
+    console.log(`Dummy HTTP server running on port ${PORT}`);
+});

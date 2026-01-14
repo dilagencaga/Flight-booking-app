@@ -47,7 +47,7 @@ services:
           name: airline-redis
           property: connectionString
 
-  - type: worker
+  - type: web
     name: notification-service
     runtime: node
     region: frankfurt
