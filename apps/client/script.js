@@ -1,4 +1,5 @@
-const GATEWAY_URL = 'http://localhost:3000/api';
+const GATEWAY_URL = 'http://localhost:3000'; // Updated to root for correct path concatenation
+console.log("Script loaded. GATEWAY_URL:", GATEWAY_URL);
 
 // Tab Switching Logic
 function openTab(tabName) {
@@ -364,6 +365,7 @@ document.addEventListener('click', function (e) {
 // Authentication Logic
 let authToken = null;
 
+// Consolidated Login Function
 async function loginAdmin() {
     const username = document.getElementById('login_username').value;
     const password = document.getElementById('login_password').value;
@@ -372,9 +374,8 @@ async function loginAdmin() {
     resultP.innerText = 'Verifying...';
 
     try {
-        // Authenticate against Gateway
-        // Auth route is at root /auth/login, not under /api
-        const res = await fetch(`http://localhost:3000/auth/login`, {
+        // Authenticate against Gateway (Mock Auth) -> /auth/login
+        const res = await fetch(`${GATEWAY_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -387,6 +388,7 @@ async function loginAdmin() {
             document.getElementById('admin-login').style.display = 'none';
             document.getElementById('admin-content').style.display = 'block';
             resultP.innerText = '';
+            loadAdminFlights(); // Load flights after login
         } else {
             resultP.innerText = 'Invalid credentials!';
         }
@@ -398,11 +400,17 @@ async function loginAdmin() {
 // API Functions
 // API Functions
 async function searchFlights() {
+    console.log("searchFlights called");
     const fromInput = document.getElementById('sf_from');
     const toInput = document.getElementById('sf_to');
     const dateInput = document.getElementById('sf_date_dep');
     const returnDateInput = document.getElementById('sf_date_ret');
-    const resultDiv = document.getElementById('searchResult');
+    const resultDiv = document.getElementById('searchResult') || document.getElementById('search-results'); // Support both ID conventions
+
+    if (!resultDiv) {
+        console.error("Result container not found!");
+        return;
+    }
 
     const from = fromInput.value;
     const to = toInput.value;
@@ -428,7 +436,11 @@ async function searchFlights() {
     }
 
     // Date Logic
-    const tripType = document.querySelector('input[name="tripType"]:checked').value;
+    let tripType = 'one';
+    const tripTypeEl = document.querySelector('input[name="tripType"]:checked');
+    if (tripTypeEl) {
+        tripType = tripTypeEl.value;
+    }
 
     if (tripType === 'round' && !returnDateInput.value) {
         // Fallback to one way if return date missing
@@ -452,7 +464,8 @@ async function searchFlights() {
     resultDiv.innerHTML = '<p>Searching...</p>';
 
     try {
-        let url = `${GATEWAY_URL}/search/flights?from=${from}&to=${to}`;
+        // Updated URL to correct path
+        let url = `${GATEWAY_URL}/v1/search/flights?from=${from}&to=${to}`;
         if (date) {
             url += `&date=${date}`;
         }
@@ -477,9 +490,7 @@ async function searchFlights() {
             if (businessPax > 0 && !hasBusinessPrice) {
                 if (economyPax > 0) {
                     // Mixed Cabin Case: Business unavailable, but Economy exists.
-                    // Allow buying Economy portion (or just enable button and warn)
-                    // User said: "economy ticket buy" labeled button.
-                    actionButton = `<button class="btn-primary" style="padding: 8px 16px; margin-top: 5px; background-color:#ff9800;" onclick="prefillBuy('${f.id}', '${f.code}', '${f.from}', '${f.to}')">Buy Economy Ticket</button>`;
+                    actionButton = `<button class="btn-primary" style="padding: 8px 16px; margin-top: 5px; background-color:#ff9800;" onclick="prefillBuy('${f.id}', '${f.code}', '${f.from}', '${f.to}', ${f.price})">Buy Economy Ticket</button>`;
                     warningMsg = `<small style="display:block; margin-top:5px; color:red; font-weight:bold;">No available ticket for business passengers</small>`;
                 } else {
                     // Only Business selected, but none available. Block.
@@ -502,12 +513,12 @@ async function searchFlights() {
                     <h3>${f.code}</h3>
                     <p>${f.from} ➝ ${f.to}</p>
                     <small>Capacity: ${f.capacity}</small>
+                    <small style="display:block;color:#666;">Date: ${f.date}</small>
                 </div>
                 <div class="flight-action">
                     <div class="flight-price" style="font-size:1.1rem; line-height:1.2;">${priceDisplay}</div>
                     ${actionButton}
                     ${warningMsg}
-                    <small style="display:block; margin-top:5px; color:#999;">${f.code}</small>
                 </div>
             </div>`;
         });
@@ -535,7 +546,7 @@ async function refreshUserData() {
     if (user && (user.username || user.email)) {
         try {
             const username = user.username || user.email;
-            const res = await fetch(`http://localhost:3000/v1/miles/${username}`);
+            const res = await fetch(`${GATEWAY_URL}/v1/miles/${username}`);
             if (res.ok) {
                 const data = await res.json();
                 if (data.miles !== undefined) {
@@ -710,7 +721,7 @@ async function adminLogin() {
     const password = document.getElementById('a_pass').value;
 
     try {
-        const res = await fetch(`http://localhost:3000/v1/auth/login`, {
+        const res = await fetch(`${GATEWAY_URL}/v1/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -731,7 +742,7 @@ async function adminLogin() {
 
 async function loadAdminFlights() {
     try {
-        const res = await fetch(`http://localhost:3000/v1/flights/admin`, { headers: { Authorization: `Bearer ${authToken}` } }); // Updated URL
+        const res = await fetch(`${GATEWAY_URL}/v1/flights/admin`, { headers: { Authorization: `Bearer ${authToken}` } });
         const flights = await res.json();
         const list = document.getElementById('admin-flight-list');
         list.innerHTML = '';
@@ -748,75 +759,9 @@ async function loadAdminFlights() {
     } catch (err) { console.error(err); }
 }
 
-async function searchFlights() {
-    const from = document.getElementById('sf_from').value.toUpperCase();
-    const to = document.getElementById('sf_to').value.toUpperCase();
+// Duplicate searchFlights removed
 
-    // Get formatted date from hidden input or construct manually
-    // Using simple approach: if user selected date, use it.
-    let date = "";
-    if (activeDateType === 'dep') {
-        date = document.getElementById('sf_date_dep').value;
-    }
-
-    if (!from || !to) {
-        alert("Please select Source and Destination");
-        return;
-    }
-
-    const resultsDiv = document.getElementById('search-results');
-    resultsDiv.innerHTML = '<p>Searching...</p>';
-
-    try {
-        let url = `http://localhost:3000/v1/search/flights?from=${from}&to=${to}`; // Updated URL
-        if (date) {
-            url += `&date=${date}`;
-        }
-
-        const res = await fetch(url);
-        const flights = await res.json();
-
-        resultsDiv.innerHTML = '';
-        if (flights.length === 0) {
-            resultsDiv.innerHTML = '<p>No flights found.</p>';
-            return;
-        }
-
-        flights.forEach(f => {
-            const div = document.createElement('div');
-            div.className = 'flight-card';
-            div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <h3 style="margin:0; color:#E30A17;">${f.code}</h3>
-                        <div style="font-size:1.1rem; font-weight:500;">${f.from} ➝ ${f.to}</div>
-                        <div style="color:#666;">${f.date} | Duration: ${f.duration || 120} min</div>
-                    </div>
-                    <div style="text-align:right;">
-                        <div style="font-size:1.4rem; font-weight:bold; color:#333;">₹${f.price}</div>
-                        <small style="color:#666; display:block;">Economy</small>
-                        <button onclick="openBookingForm(${f.id}, '${f.code}', '${f.from}', '${f.to}', ${f.price})" 
-                            style="background:#E30A17; color:white; border:none; padding:8px 16px; margin-top:5px; cursor:pointer; border-radius:4px;">
-                            Select
-                        </button>
-                    </div>
-                </div>
-            `;
-            resultsDiv.appendChild(div);
-        });
-
-    } catch (err) {
-        resultsDiv.innerHTML = '<p style="color:red">Error searching flights</p>';
-    }
-}
-
-async function buyTicket() {
-    // ... (rest of logic same, need to check if internal URL needs update)
-    // Checking buyTicket fetch call inside function
-    // Assuming previous view showed it, but need to be sure.
-    // I will replace later if needed or replace whole function if visible.
-    // Wait, buyTicket calls /flights/buy. I must update it.
-}
+// Placeholder removed
 
 // Close modal when clicking outside
 window.onclick = function (event) {
@@ -897,7 +842,7 @@ async function buyTicket() {
     resultDiv.innerHTML = 'Processing...';
 
     try {
-        const res = await fetch(`http://localhost:3000/v1/flights/buy`, {
+        const res = await fetch(`${GATEWAY_URL}/v1/flights/buy`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -966,7 +911,7 @@ async function addFlight() {
             capacity: parseInt(document.getElementById('af_cap').value)
         };
 
-        const res = await fetch(`http://localhost:3000/v1/flights/add`, {
+        const res = await fetch(`${GATEWAY_URL}/v1/flights/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1021,7 +966,7 @@ async function autoPredictPrice() {
     try {
         // Parallel requests if business is included
         const promises = [
-            fetch(`${GATEWAY_URL}/predict`, {
+            fetch(`${GATEWAY_URL}/api/predict`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ duration, class: 'Economy' })
@@ -1030,7 +975,7 @@ async function autoPredictPrice() {
 
         if (isBusinessIncluded) {
             promises.push(
-                fetch(`${GATEWAY_URL}/predict`, {
+                fetch(`${GATEWAY_URL}/api/predict`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ duration, class: 'Business' })
