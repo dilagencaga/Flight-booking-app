@@ -16,7 +16,12 @@ const SECRET_KEY = process.env.SECRET_KEY || 'mysecretkey';
 
 const ensureProtocol = (url) => {
     if (!url) return '';
-    return url.startsWith('http') ? url : `https://${url}`;
+    if (url.startsWith('http')) return url;
+    // If it looks like a Render internal hostname (no dots), make it a public URL
+    if (!url.includes('.') && !url.includes(':')) {
+        return `https://${url}.onrender.com`;
+    }
+    return `https://${url}`;
 };
 
 const FLIGHT_SERVICE_URL = ensureProtocol(process.env.FLIGHT_SERVICE_URL) || 'http://localhost:3001';
