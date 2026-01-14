@@ -8,18 +8,19 @@ const TICKET_QUEUE = 'ticket_notifications';
 const MILES_QUEUE = 'miles_notifications';
 
 // Gmail Transporter
-// Gmail Transporter with explicit settings to avoid timeouts
+// Gmail Transporter (Using Port 587 - STARTTLS for better compatibility)
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // true for 465, false for other ports
+    port: 587,
+    secure: false, // true for 465, false for other ports
     auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS
     },
     tls: {
         rejectUnauthorized: false
-    }
+    },
+    family: 4 // Force IPv4 to prevent Render IPv6 issues
 });
 
 // Verify connection configuration
